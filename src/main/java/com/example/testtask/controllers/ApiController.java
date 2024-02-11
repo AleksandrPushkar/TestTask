@@ -7,13 +7,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping("/api/v1")
 @RequiredArgsConstructor
 public class ApiController {
     private final WalletService walletService;
     @GetMapping("/wallets/{id}")
-    public ResponseEntity<Integer> getBalance(@PathVariable Integer id) {
+    public ResponseEntity<Integer> getBalance(@PathVariable UUID id) {
         return ResponseEntity.ok(walletService.getBalance(id));
     }
     @PostMapping("/wallet")

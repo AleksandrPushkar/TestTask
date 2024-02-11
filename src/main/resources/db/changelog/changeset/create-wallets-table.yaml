@@ -8,11 +8,9 @@ databaseChangeLog:
             columns:
               - column:
                   name: id
-                  type: integer
-                  autoIncrement: true
+                  type: uuid
                   constraints:
                     primaryKey: true
-                    nullable: false
               - column:
                   name: balance
                   type: integer

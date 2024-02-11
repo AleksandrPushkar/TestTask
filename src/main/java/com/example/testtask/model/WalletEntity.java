@@ -4,6 +4,10 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.UuidGenerator;
+
+import java.util.UUID;
+
 @Getter
 @Setter
 @Entity
@@ -11,8 +15,9 @@ import lombok.Setter;
 @Table(name = "wallets")
 public class WalletEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    @GeneratedValue
+    @UuidGenerator
+    private UUID uuid;
 
     private Integer balance;
 }

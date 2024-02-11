@@ -10,14 +10,19 @@ import com.example.testtask.repository.WalletRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 @RequiredArgsConstructor
 public class WalletServiceImpl implements WalletService {
     private final WalletRepo walletRepo;
 
     @Override
-    public int getBalance(int walletId) {
-        WalletEntity wallet = walletRepo.findById(walletId).orElseThrow(WalletNotFoundException::new);
+    public int getBalance(UUID walletId) {
+        WalletEntity wallet = walletRepo.findByUuid(walletId);
+        if (wallet == null) {
+            throw new WalletNotFoundException();
+        }
         return wallet.getBalance();
     }
 

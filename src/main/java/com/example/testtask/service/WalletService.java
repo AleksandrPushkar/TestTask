@@ -4,9 +4,11 @@ import com.example.testtask.dto.WalletOperationRequest;
 import com.example.testtask.dto.WalletOperationResponse;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 public interface WalletService {
-    int getBalance(int walletId);
+    int getBalance(UUID walletId);
 
     WalletOperationResponse deposit(WalletOperationRequest operationRequest);
     WalletOperationResponse withdraw(WalletOperationRequest operationRequest);
