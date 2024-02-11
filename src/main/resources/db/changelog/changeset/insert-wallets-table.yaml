@@ -4,4 +4,4 @@ databaseChangeLog:
       author: AleksandrPushkar
       changes:
           - customChange:
-              class: com.example.testtask.config;.DefaultWallets
+              class: com.example.testtask.config.DefaultWallets

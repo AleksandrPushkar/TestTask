@@ -7,6 +7,7 @@ import com.example.testtask.exceptions.throwns.InsufficientFundsOnWalletExceptio
 import com.example.testtask.exceptions.throwns.WalletNotFoundException;
 import com.example.testtask.model.WalletEntity;
 import com.example.testtask.repository.WalletRepo;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -27,11 +28,9 @@ public class WalletServiceImpl implements WalletService {
     }
 
     @Override
+    @Transactional
     public WalletOperationResponse deposit(WalletOperationRequest operationRequest) {
-        if (operationRequest.getAmount() < 1) {
-            throw new AmountNotCorrectException();
-        }
-        WalletEntity wallet = walletRepo.findById(operationRequest.getWalletId()).orElseThrow(WalletNotFoundException::new);
+        WalletEntity wallet = getWalletFromDbBeforeOperation(operationRequest);
         wallet.setBalance(wallet.getBalance() + operationRequest.getAmount());
         walletRepo.save(wallet);
         return new WalletOperationResponse(true, "");
@@ -39,15 +38,23 @@ public class WalletServiceImpl implements WalletService {
 
     @Override
     public WalletOperationResponse withdraw(WalletOperationRequest operationRequest) {
-        if (operationRequest.getAmount() < 1) {
-            throw new AmountNotCorrectException();
-        }
-        WalletEntity wallet = walletRepo.findById(operationRequest.getWalletId()).orElseThrow(WalletNotFoundException::new);
+        WalletEntity wallet = getWalletFromDbBeforeOperation(operationRequest);
         if (operationRequest.getAmount() > wallet.getBalance()) {
             throw new InsufficientFundsOnWalletException();
         }
         wallet.setBalance(wallet.getBalance() - operationRequest.getAmount());
         walletRepo.save(wallet);
         return new WalletOperationResponse(true, "");
+    }
+
+    private WalletEntity getWalletFromDbBeforeOperation(WalletOperationRequest operationRequest) {
+        if (operationRequest.getAmount() < 1) {
+            throw new AmountNotCorrectException();
+        }
+        WalletEntity wallet = walletRepo.findByUuid(operationRequest.getWalletUuid());
+        if (wallet == null) {
+            throw new WalletNotFoundException();
+        }
+        return wallet;
     }
 }

@@ -28,6 +28,8 @@ public class DefaultWallets implements CustomTaskChange {
     @Override
     public void execute(Database database) throws CustomChangeException {
         JdbcTemplate jdbcTemplate = new JdbcTemplate(new SingleConnectionDataSource(((JdbcConnection)database.getConnection()).getUnderlyingConnection(), false));
-        jdbcTemplate.update("INSERT INTO wallets (uuid, balance) VALUES(?, ?,)", new Object[] { java.util.UUID.randomUUID(), 1000});
+        jdbcTemplate.update("INSERT INTO wallets (uuid, balance) VALUES(?, ?)", new Object[] { java.util.UUID.randomUUID(), 1000});
+        jdbcTemplate.update("INSERT INTO wallets (uuid, balance) VALUES(?, ?)", new Object[] { java.util.UUID.randomUUID(), 10000});
+        jdbcTemplate.update("INSERT INTO wallets (uuid, balance) VALUES(?, ?)", new Object[] { java.util.UUID.randomUUID(), 100000});
     }
 }
