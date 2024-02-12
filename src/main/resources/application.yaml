@@ -3,16 +3,13 @@ spring:
     enabled: true
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/Bank
-    username: postgres
-    password: Test
+    url: jdbc:postgresql://localhost:5432/bank_db
+    username: user
+    password: pass
   jpa:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         ddl-auto: none
     show_sql: true
-  docker:
-    compose:
-      enabled: true
       

@@ -1,0 +1,28 @@
+version: '3.1'
+
+volumes:
+  pg_bank:
+
+services:
+  bank_db:
+     image: postgres
+     restart: always
+     environment:
+       - POSTGRES_USER=user
+       - POSTGRES_PASSWORD=pass
+       - POSTGRES_DB=bank_db
+     volumes:
+       - pg_bank:/var/lib/postgresql/data
+
+     ports:
+       - "127.0.0.1:5432:5432"
+  app:
+    restart: always
+    build: src/test/java/com/example/testtask
+    ports:
+      - "8080:8080"
+    depends_on:
+      - bank_db
+    environment:
+      SPRING_DATASOURCE_URL: 'jdbc:postgresql://bank_db:5432/bank_db'
+      JAVA_OPTS: 'Xmx512m'
