@@ -12,3 +12,7 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         ddl-auto: none
     show_sql: true
+  docker:
+    compose:
+      enabled: true
+      
