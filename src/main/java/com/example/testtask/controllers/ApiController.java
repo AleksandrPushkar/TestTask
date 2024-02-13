@@ -1,5 +1,6 @@
 package com.example.testtask.controllers;
 
+import com.example.testtask.dto.GetWalletListResponse;
 import com.example.testtask.dto.WalletOperationRequest;
 import com.example.testtask.dto.WalletOperationResponse;
 import com.example.testtask.service.WalletService;
@@ -26,5 +27,9 @@ public class ApiController {
         } else {
             return ResponseEntity.ok( walletService.withdraw(operationRequest));
         }
+    }
+    @GetMapping("/wallets")
+    public ResponseEntity<GetWalletListResponse> getWalletList() {
+        return ResponseEntity.ok(walletService.getWalletList());
     }
 }
