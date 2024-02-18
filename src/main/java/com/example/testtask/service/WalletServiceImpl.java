@@ -12,9 +12,10 @@ import com.example.testtask.model.WalletEntity;
 import com.example.testtask.repository.WalletRepo;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 
-import javax.swing.text.html.parser.Entity;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -34,15 +35,17 @@ public class WalletServiceImpl implements WalletService {
     }
 
     @Override
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
+    @Retryable(maxAttempts = 15)
     public WalletOperationResponse deposit(WalletOperationRequest operationRequest) {
         if (operationRequest.getAmount() < 1) {
             throw new AmountNotCorrectException();
         }
-        synchronized (walletRepo) {
-            WalletEntity wallet = getWalletFromDbBeforeOperation(operationRequest);
-            wallet.setBalance(wallet.getBalance() + operationRequest.getAmount());
-            walletRepo.save(wallet);
+        WalletEntity wallet = walletRepo.findByUuid(operationRequest.getWalletUuid());
+        if (wallet == null) {
+            throw new WalletNotFoundException();
         }
+        wallet.setBalance(wallet.getBalance() + operationRequest.getAmount());
         return new WalletOperationResponse(true, "");
     }
 
